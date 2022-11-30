@@ -1,0 +1,125 @@
+{% extends 'store/layouts/main.html' %}
+
+
+{% block content %}
+<DOCTYPE html>
+<div class="py-3 bg-primary">
+    <div class="container">
+        <a class="text-white" href="{% url 'home' %}">Home /</a>
+        <a class="text-white" href="{% url 'collections' %}">Categories /</a>
+        <a class="text-white" href="{% url 'collectionsview' products.category.slug %}">{{ products.category.name }} /</a>
+        <a class="text-white" href="{% url 'productview' products.category.slug products.slug %}">{{ products.name }}</a>
+    </div>
+</div>
+
+<div class="py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow product_data">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                {% if products.tag %}
+                                <label class="product-viewtag">{{ products.tag }}</label>
+                                {% endif %}
+                                <img src="{{ products.product_image.url }}" class="w-100" alt="image">
+                            </div>
+                            <div class="col-md-8">
+                                <h2 class="mb-0">
+                                    {{ products.name }}
+                                    {% if products.trending %}
+                                    <label style="font-size: 16px;" class="float-end badge bg-dnager trending_tag">Trending</label>
+                                    {% endif %}
+                                </h2>
+                                <hr>
+                                <label class="me-3">Original Price : <s>Rs {{ products.original_price | stringformat:'d'}}</s></label>
+                                <label class="fw-bold">Selling Price : Rs {{ products.selling_price | stringformat:'d'}}</label>
+                                <p class="mt-3">
+                                    {{ products.small_description }}
+                                </P>
+                                <hr>
+                                {% if products.quantity > 0 %}
+                                <label class="badge bg-success">In stock</label>
+                                {% else %}
+                                <label class="badge bg-danger">Out of stock</label>
+                                {% endif %}
+                                <div class"row-mt-2">
+                                    <div class="col-md-3">
+                                        {% csrf_token %}
+                                        <input type="hidden" value="{{ products.id }}" class="prod_id">
+                                        <label for="Quantity">Quantity</label>
+                                        <div class="input-group text-center mb-3" style="width:130px;">
+                                            <button class="input-group-text decrement-btn">-</button>
+                                            <input type="text" name="quantity" class="form-control qty-input text-center" value="1">
+                                            <button class="input-group-text increment-btn">+</button>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-9">
+                                        <br/>
+                                        {% if products.quantity > 0 %}
+                                        <button type="button" class="btn btn-primary me-3 float-start addToCartBtn">Add to Cart <i class="fa fa-shopping-cart"></i></button>
+                                        <label for="Size">Size:</label>
+                                        <select name="size" id="size">
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="4">5</option>
+                                            <option value="4">6</option>
+                                            <option value="4">7</option>
+                                            <option value="4">8</option>
+                                            <option value="4">9</option>
+                                            <option value="4">10</option>
+                                        </select>
+                                        {% endif %}
+                                        <button type="button" class="btn btn-success me-3 float-start addToWishlist">Add to Wishlist <i class="fa fa-heart"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="col-md-12">
+                                    <hr>
+                                    <h3>Description</h3>
+                                    <p class="mt-3">
+                                        {{ products.description}}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-12">
+            <h3>Recommended For You</h3>
+            <hr>
+            <div class="row">
+                {% for item in rec_array %}
+                <div class="col-md-3">
+                    <div class="card">
+                        <a href="{% url 'productview' item.category.slug item.slug %}">
+                            <div class="card-body">
+                                <div class="category-image">
+                                    <img src="{{ item.product_image.url }}" alt="Product image" class="w-100"/>
+                                </div>
+                                <h4 class="text-center">{{ item.name }}</h4>
+                                <span class="float-start"><s>{{ item.original_price |stringformat:'d'}}</s></span>
+                                <span class="float-end">{{ item.selling_price |stringformat:'d'}}</span>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+<html> 
+{% endblock content %}
+

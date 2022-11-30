@@ -1,0 +1,63 @@
+{% extends 'store/layouts/supl.html' %}
+
+{% block content %}
+{% csrf_token %}
+
+    <div class="py-3 bg-primary">
+        <div class="container">
+            <a class="text-white" href="{% url 'supplierproduct' %}">Home </a>
+        </div>
+    </div>
+   
+
+    <div class="container mt-3">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card shadow">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <form action=""method="POST">
+                                    {% csrf_token %}
+                                <h4>Profile {{ request.user }}</h4>
+                               
+
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <td>Product list</td>
+                                                <td>Accept</td>
+                                                <td>Decline</td>
+
+
+                                            </tr>
+                                        </thead>
+                                        {% for i in products %}
+                                            <tr>
+                                                <td>{{ i.product }}</td>
+                                                <td>
+                                                    <a href="{% url 'orderaccept' i.product %}">Accept</a>
+                                                </td>
+                                                <td>
+                                                    <a href="{% url 'orderdecline' i.product %}">Reject</a>
+                                                </td>                                            
+                                            </tr>
+                                        {% endfor %}
+                                        </thead>
+                                        <tbody>
+                
+                                        </tbody>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>       
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+
+
